@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: byd-profit-api
+    env: node
+    region: oregon
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false # Para proteger a variável sensível
+    autoDeploy: true
+    healthCheckPath: /
+    plan: starter # Plano gratuito
+    domains:
+      - api.bydprofit.com # Substitua pelo seu domínio 

@@ -1,0 +1,39 @@
+name: Deploy to Supabase
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ secrets.API_URL }}
+          VITE_SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          VITE_PIX_KEY: ${{ secrets.PIX_KEY }}
+
+      - name: Deploy to Supabase
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Deploy Static Files
+        run: |
+          supabase login --access-token ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
+          supabase hosting deploy dist 
