@@ -36,10 +36,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node@latest"
-    }
-  }
+  ]
 } 
