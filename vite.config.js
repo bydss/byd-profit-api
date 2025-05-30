@@ -19,39 +19,36 @@ export default defineConfig({
       '@api': path.resolve(__dirname, './src/api'),
       '@assets': path.resolve(__dirname, './src/assets')
     },
-    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   server: {
-    port: 5173,
+    port: 3000,
     host: true,
-    open: true
+    open: true,
+    middlewareMode: true
   },
   optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
     esbuildOptions: {
       loader: {
         '.js': 'jsx',
-      },
-    },
+        '.jsx': 'jsx'
+      }
+    }
   },
   build: {
     outDir: 'dist',
+    assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': [
-            '@radix-ui/react-alert-dialog',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-label',
-            '@radix-ui/react-select',
-            '@radix-ui/react-slot',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-toast'
-          ]
-        }
+        format: 'es',
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`
       }
-    }
+    },
+    target: 'esnext',
+    minify: 'esbuild'
   }
 }) 
